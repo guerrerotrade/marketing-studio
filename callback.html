@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<title>Connexion — Marketing Studio</title>
+<style>body{margin:0;background:#0b0a12;color:#e9e7f2;font:16px/1.6 -apple-system,Inter,system-ui,sans-serif;display:grid;place-items:center;min-height:100vh;text-align:center;padding:20px}a{color:#b57cff}</style>
+</head>
+<body>
+<main>
+<h1>Connexion en cours…</h1>
+<p id="msg">Retour vers Marketing Studio sur votre ordinateur.</p>
+</main>
+<script>
+// Relais de connexion : la plateforme renvoie ici (adresse https exigée), et cette page
+// transmet aussitôt le code à Marketing Studio qui tourne sur l'ordinateur (localhost).
+// Le code seul ne sert à rien : il doit être échangé avec la clé secrète, restée sur l'ordinateur.
+(function () {
+  var q = new URLSearchParams(location.search);
+  var platform = (q.get('state') || '').split('.')[0] || 'tiktok';
+  var target = 'http://localhost:4400/api/connect/' + encodeURIComponent(platform) + '/callback' + location.search;
+  if (!q.get('code') && !q.get('error')) {
+    document.getElementById('msg').textContent = 'Aucun code reçu. Relancez la connexion depuis Marketing Studio.';
+    return;
+  }
+  history.replaceState(null, '', location.pathname);
+  location.replace(target);
+})();
+</script>
+</body>
+</html>
